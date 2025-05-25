@@ -12,7 +12,6 @@ INSERT INTO rangers (name, region) VALUES
 
 SELECT * from rangers;
 
-
 -- species Table:
 CREATE TABLE species (
     species_id SERIAL PRIMARY KEY,
@@ -30,7 +29,6 @@ INSERT INTO species (common_name, scientific_name, discovery_date, conservation_
 ('Asiatic Elephant', 'Elephas maximus indicus', '1758-01-01', 'Endangered');
 
 SELECT * from species;
-
 
 -- sightings Table:
 CREATE TABLE sightings (
@@ -50,7 +48,6 @@ INSERT INTO sightings (ranger_id, species_id, sighting_time, location, notes) VA
 
 SELECT * FROM sightings;
 
-
 -- Problem: 1
 SELECT * from rangers;
 INSERT INTO rangers (name, region) VALUES ('Derek Fox', 'Coastal Plains');
@@ -59,25 +56,50 @@ INSERT INTO rangers (name, region) VALUES ('Derek Fox', 'Coastal Plains');
 SELECT * from sightings;
 SELECT COUNT(DISTINCT species_id) AS unique_species_count FROM sightings;
 
-
 -- Problem: 3
 SELECT * from sightings;
 SELECT * FROM sightings WHERE location LIKE '%Pass%';
 
-
 -- Problem: 4
 SELECT * from rangers;
 SELECT * from sightings;
-
 SELECT r.name, COUNT(s.sighting_id) AS total_sightings
 FROM rangers r
 LEFT JOIN sightings s ON r.ranger_id = s.ranger_id
 GROUP BY r.name;
 
-
 -- Problem: 5
 SELECT * from species;
 SELECT * from sightings;
-
 SELECT common_name FROM species 
 WHERE species_id NOT IN (SELECT DISTINCT species_id FROM sightings);
+
+-- Problem: 6
+SELECT * from rangers;
+SELECT * from species;
+SELECT * from sightings;
+SELECT sp.common_name, s.sighting_time, r.name
+FROM sightings s
+JOIN species sp ON s.species_id = sp.species_id
+JOIN rangers r ON s.ranger_id = r.ranger_id
+ORDER BY s.sighting_time DESC
+LIMIT 2;
+
+-- Problem: 7
+
+
+-- Problem: 8
+SELECT * from sightings;
+SELECT sighting_id, 
+       CASE 
+           WHEN EXTRACT(HOUR FROM sighting_time) < 12 THEN 'Morning'
+           WHEN EXTRACT(HOUR FROM sighting_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+           ELSE 'Evening'
+       END AS time_of_day
+FROM sightings;
+
+-- Problem: 9
+SELECT * from rangers;
+SELECT * from sightings;
+DELETE FROM rangers 
+WHERE ranger_id NOT IN (SELECT DISTINCT ranger_id FROM sightings);
