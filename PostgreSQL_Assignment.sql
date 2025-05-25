@@ -33,7 +33,6 @@ SELECT * from species;
 
 
 -- sightings Table:
-
 CREATE TABLE sightings (
     sighting_id SERIAL PRIMARY KEY,
     ranger_id INT REFERENCES rangers(ranger_id) ON DELETE CASCADE,
@@ -50,3 +49,35 @@ INSERT INTO sightings (ranger_id, species_id, sighting_time, location, notes) VA
 (2, 1, '2024-05-18 18:30:00', 'Snowfall Pass', NULL);
 
 SELECT * FROM sightings;
+
+
+-- Problem: 1
+SELECT * from rangers;
+INSERT INTO rangers (name, region) VALUES ('Derek Fox', 'Coastal Plains');
+
+-- Problem: 2
+SELECT * from sightings;
+SELECT COUNT(DISTINCT species_id) AS unique_species_count FROM sightings;
+
+
+-- Problem: 3
+SELECT * from sightings;
+SELECT * FROM sightings WHERE location LIKE '%Pass%';
+
+
+-- Problem: 4
+SELECT * from rangers;
+SELECT * from sightings;
+
+SELECT r.name, COUNT(s.sighting_id) AS total_sightings
+FROM rangers r
+LEFT JOIN sightings s ON r.ranger_id = s.ranger_id
+GROUP BY r.name;
+
+
+-- Problem: 5
+SELECT * from species;
+SELECT * from sightings;
+
+SELECT common_name FROM species 
+WHERE species_id NOT IN (SELECT DISTINCT species_id FROM sightings);
