@@ -86,7 +86,10 @@ ORDER BY s.sighting_time DESC
 LIMIT 2;
 
 -- Problem: 7
-
+SELECT * from species;
+UPDATE species 
+SET conservation_status = 'Historic' 
+WHERE discovery_date < '1800-01-01';
 
 -- Problem: 8
 SELECT * from sightings;
